@@ -12,26 +12,40 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffeef2;
+            background-color: #ffeef2; /* Soft pink background */
             font-family: 'Comic Sans MS', cursive, sans-serif;
             overflow: hidden;
             text-align: center;
         }
         .container {
-            padding: 30px;
+            padding: 20px;
             background: white;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(214, 51, 132, 0.2);
-            max-width: 400px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
+            max-width: 350px; /* Kept nice and compact for mobile */
             width: 85%;
+            transition: transform 0.3s ease;
+        }
+        /* Fixed size for image container to prevent layout jumping */
+        #gif-container {
+            height: 200px; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
         }
         #gif-container img {
-            width: 200px;
-            height: 200px;
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-            margin-bottom: 20px;
+            border-radius: 15px;
         }
-        h1 { color: #d63384; font-size: 24px; min-height: 80px; }
+        h1 { 
+            color: #d63384; 
+            font-size: 22px; 
+            margin: 10px 0;
+            min-height: 60px; /* Prevents text jumping */
+        }
         .buttons {
             display: flex;
             justify-content: center;
@@ -41,13 +55,15 @@
         button {
             width: 100px;
             padding: 12px 0;
-            font-size: 18px;
+            font-size: 16px;
             border: none;
-            border-radius: 12px;
+            border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
+            transition: transform 0.2s, background-color 0.3s;
         }
-        #yesBtn { background-color: #ff4d6d; color: white; }
+        button:active { transform: scale(0.95); }
+        #yesBtn { background-color: #ff4d6d; color: white; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3); }
         #noBtn { background-color: #888; color: white; }
     </style>
 </head>
@@ -55,7 +71,7 @@
 
 <div class="container" id="mainCard">
     <div id="gif-container">
-        <img id="mainGif" src="https://media.tenor.com/T_6_Y_XzY38AAAAi/peach-goma-peach-and-goma.gif" alt="Sad/Teary Eyes">
+        <img id="mainGif" src="https://media1.tenor.com/m/7zKwuGz9qF8AAAAC/peach-goma-crying.gif" alt="Cute Cat" onerror="this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndWp6Znc0bm5xdm9oZzR4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif'">
     </div>
     <h1 id="question">Will you be my Valentine, Swee? 🥺</h1>
     
@@ -68,11 +84,11 @@
 <script>
     let noClickCount = 0;
     
-    // Stable Peach Goma Links
+    // More reliable direct GIF links
     const gifs = {
-        sad: "https://media.tenor.com/T_6_Y_XzY38AAAAi/peach-goma-peach-and-goma.gif",
-        angry: "https://media.tenor.com/uU_Y3Wn-0_4AAAAi/peach-goma-angry.gif",
-        happy: "https://media.tenor.com/9vD_vKIn2_IAAAAi/peach-goma-love.gif"
+        sad: "https://media1.tenor.com/m/7zKwuGz9qF8AAAAC/peach-goma-crying.gif",  // Sad Crying
+        angry: "https://media1.tenor.com/m/xU7s8Q8C6mQAAAAC/mochi-peach.gif",      // Angry hitting table
+        happy: "https://media1.tenor.com/m/9vD_vKIn2_IAAAAC/peach-goma-love.gif"   // Happy Kiss/Love
     };
 
     function handleNo() {
@@ -81,32 +97,33 @@
         const mainGif = document.getElementById('mainGif');
         const noBtn = document.getElementById('noBtn');
 
-        // 1. Set to Angry immediately
+        // 1. ANGRY STATE (Immediately)
         mainGif.src = gifs.angry;
         
         const messages = [
             "Arghhhhhhh! Wrong choice! 😠",
             "I said YES, not that! 👊",
-            "Think again, Swee! 😤",
-            "Stop clicking that! 😠",
-            "Fine... let me help you." 
+            "Don't make me angry! 😤",
+            "Seriously? Click Yes! 😡",
+            "Okay, that's enough..." 
         ];
         
         question.innerText = messages[Math.min(noClickCount - 1, messages.length - 1)];
 
-        // 2. After 1.5 seconds, go back to "Convincing" Sad Eyes
+        // 2. BACK TO SAD STATE (After 2 seconds)
+        // This brings back the "Guilt Trip" Sad face
         setTimeout(() => {
-            if (noClickCount < 5) {
+            if (noClickCount < 5) { // Only if they haven't clicked too many times
                 mainGif.src = gifs.sad;
                 question.innerText = "Please say Yes? 🥺";
             }
-        }, 1500);
+        }, 2000); // 2000ms = 2 seconds
 
-        // 3. 5th Click Logic
+        // 3. THE MAGIC TRICK (5th Click)
         if (noClickCount >= 5) {
             noBtn.innerText = "Yes";
-            noBtn.style.backgroundColor = "#ff4d6d";
-            noBtn.onclick = handleYes;
+            noBtn.style.backgroundColor = "#ff4d6d"; // Turn pink
+            noBtn.onclick = handleYes; // Make it act like the Yes button
         }
     }
 
@@ -115,11 +132,14 @@
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
         container.innerHTML = `
-            <img src="${gifs.happy}" style="width:200px;">
+            <div id="gif-container">
+                <img src="${gifs.happy}" style="width:100%; height:100%; object-fit:contain;">
+            </div>
             <h1 style="color: #d63384;">Awwwww! I knew you'd say YES! ❤️✨</h1>
-            <p style="font-size: 1.2rem; color: #555;">I know you would one day, Swee! You're stuck with me now! 🥰</p>
+            <p style="font-size: 1.1rem; color: #555;">I know you would one day, Swee! You're stuck with me now! 🥰</p>
         `;
     }
 </script>
+
 </body>
 </html>
