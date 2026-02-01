@@ -31,7 +31,7 @@
             object-fit: contain;
             margin-bottom: 20px;
         }
-        h1 { color: #d63384; font-size: 24px; min-height: 80px; transition: all 0.3s; }
+        h1 { color: #d63384; font-size: 24px; min-height: 80px; }
         .buttons {
             display: flex;
             justify-content: center;
@@ -39,14 +39,13 @@
             margin-top: 20px;
         }
         button {
-            width: 100px; /* Fixed width */
+            width: 100px;
             padding: 12px 0;
             font-size: 18px;
             border: none;
             border-radius: 12px;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s;
         }
         #yesBtn { background-color: #ff4d6d; color: white; }
         #noBtn { background-color: #888; color: white; }
@@ -56,7 +55,7 @@
 
 <div class="container" id="mainCard">
     <div id="gif-container">
-        <img id="mainGif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndWp6Znc0bm5xdm9oZzR4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif" alt="Cute Character">
+        <img id="mainGif" src="https://media.tenor.com/T_6_Y_XzY38AAAAi/peach-goma-peach-and-goma.gif" alt="Sad/Teary Eyes">
     </div>
     <h1 id="question">Will you be my Valentine, Swee? 🥺</h1>
     
@@ -69,10 +68,11 @@
 <script>
     let noClickCount = 0;
     
-    // Using high-quality Peach Goma GIF links
-    const charGifs = {
-        angry: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN3RndnZsczZ2NnB4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v1.Y2lkPTc5MGI3NjExNmtuMnd3ZzR4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/6vX3P5mG6fPzG/giphy.gif",
-        happy: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjlmempsbmZ4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/v1.Y2lkPTc5MGI3NjExNHpsbjR1bm5xdm9oZzR4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/108M7gCS1JSoO4/giphy.gif"
+    // Stable Peach Goma Links
+    const gifs = {
+        sad: "https://media.tenor.com/T_6_Y_XzY38AAAAi/peach-goma-peach-and-goma.gif",
+        angry: "https://media.tenor.com/uU_Y3Wn-0_4AAAAi/peach-goma-angry.gif",
+        happy: "https://media.tenor.com/9vD_vKIn2_IAAAAi/peach-goma-love.gif"
     };
 
     function handleNo() {
@@ -81,43 +81,45 @@
         const mainGif = document.getElementById('mainGif');
         const noBtn = document.getElementById('noBtn');
 
-        // Change character to angry version
-        mainGif.src = charGifs.angry;
+        // 1. Set to Angry immediately
+        mainGif.src = gifs.angry;
         
-        // Cuter "aggressive" messages
         const messages = [
             "Arghhhhhhh! Wrong choice! 😠",
-            "I said YES, not that button! 👊",
+            "I said YES, not that! 👊",
             "Think again, Swee! 😤",
             "Stop clicking that! 😠",
-            "Wait... what just happened?" // 5th click message
+            "Fine... let me help you." 
         ];
         
         question.innerText = messages[Math.min(noClickCount - 1, messages.length - 1)];
 
-        // On the 5th try, turn NO into YES
+        // 2. After 1.5 seconds, go back to "Convincing" Sad Eyes
+        setTimeout(() => {
+            if (noClickCount < 5) {
+                mainGif.src = gifs.sad;
+                question.innerText = "Please say Yes? 🥺";
+            }
+        }, 1500);
+
+        // 3. 5th Click Logic
         if (noClickCount >= 5) {
             noBtn.innerText = "Yes";
             noBtn.style.backgroundColor = "#ff4d6d";
-            noBtn.onclick = handleYes; // Re-route the click to Yes function
+            noBtn.onclick = handleYes;
         }
     }
 
     function handleYes() {
         const container = document.getElementById('mainCard');
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
         container.innerHTML = `
-            <img src="${charGifs.happy}" style="width:200px;">
+            <img src="${gifs.happy}" style="width:200px;">
             <h1 style="color: #d63384;">Awwwww! I knew you'd say YES! ❤️✨</h1>
-            <p style="font-size: 1.2rem; color: #555;">I know you would one day, Swee! You're stuck with me now! 😍🥰</p>
+            <p style="font-size: 1.2rem; color: #555;">I know you would one day, Swee! You're stuck with me now! 🥰</p>
         `;
     }
 </script>
-
 </body>
 </html>
