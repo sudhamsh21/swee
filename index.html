@@ -12,7 +12,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #ffeef2; /* Soft pink background */
+            background-color: #ffeef2;
             font-family: 'Comic Sans MS', cursive, sans-serif;
             overflow: hidden;
             text-align: center;
@@ -22,11 +22,9 @@
             background: white;
             border-radius: 25px;
             box-shadow: 0 10px 30px rgba(214, 51, 132, 0.15);
-            max-width: 350px; /* Kept nice and compact for mobile */
+            max-width: 350px;
             width: 85%;
-            transition: transform 0.3s ease;
         }
-        /* Fixed size for image container to prevent layout jumping */
         #gif-container {
             height: 200px; 
             display: flex;
@@ -44,7 +42,7 @@
             color: #d63384; 
             font-size: 22px; 
             margin: 10px 0;
-            min-height: 60px; /* Prevents text jumping */
+            min-height: 60px;
         }
         .buttons {
             display: flex;
@@ -60,10 +58,9 @@
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.2s, background-color 0.3s;
+            transition: transform 0.2s;
         }
-        button:active { transform: scale(0.95); }
-        #yesBtn { background-color: #ff4d6d; color: white; box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3); }
+        #yesBtn { background-color: #ff4d6d; color: white; }
         #noBtn { background-color: #888; color: white; }
     </style>
 </head>
@@ -71,7 +68,7 @@
 
 <div class="container" id="mainCard">
     <div id="gif-container">
-        <img id="mainGif" src="https://media1.tenor.com/m/7zKwuGz9qF8AAAAC/peach-goma-crying.gif" alt="Cute Cat" onerror="this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpndWp6Znc0bm5xdm9oZzR4cXN6Z3J6ZzF4cXN6Z3J6ZzF4cXN6ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/cLS1cfxvGOPVpf9g3y/giphy.gif'">
+        <img id="mainGif" src="sad.gif" alt="Cute Cat">
     </div>
     <h1 id="question">Will you be my Valentine, Swee? 🥺</h1>
     
@@ -84,11 +81,11 @@
 <script>
     let noClickCount = 0;
     
-    // More reliable direct GIF links
+    // Using LOCAL filenames now (guaranteed to work)
     const gifs = {
-        sad: "https://media1.tenor.com/m/7zKwuGz9qF8AAAAC/peach-goma-crying.gif",  // Sad Crying
-        angry: "https://media1.tenor.com/m/xU7s8Q8C6mQAAAAC/mochi-peach.gif",      // Angry hitting table
-        happy: "https://media1.tenor.com/m/9vD_vKIn2_IAAAAC/peach-goma-love.gif"   // Happy Kiss/Love
+        sad: "sad.gif",
+        angry: "angry.gif",
+        happy: "happy.gif"
     };
 
     function handleNo() {
@@ -97,7 +94,7 @@
         const mainGif = document.getElementById('mainGif');
         const noBtn = document.getElementById('noBtn');
 
-        // 1. ANGRY STATE (Immediately)
+        // 1. Show Angry Face Immediately
         mainGif.src = gifs.angry;
         
         const messages = [
@@ -110,20 +107,19 @@
         
         question.innerText = messages[Math.min(noClickCount - 1, messages.length - 1)];
 
-        // 2. BACK TO SAD STATE (After 2 seconds)
-        // This brings back the "Guilt Trip" Sad face
+        // 2. Wait 2.5 seconds, then go back to Sad Face
         setTimeout(() => {
-            if (noClickCount < 5) { // Only if they haven't clicked too many times
+            if (noClickCount < 5) {
                 mainGif.src = gifs.sad;
                 question.innerText = "Please say Yes? 🥺";
             }
-        }, 2000); // 2000ms = 2 seconds
+        }, 2500); 
 
-        // 3. THE MAGIC TRICK (5th Click)
+        // 3. 5th Click Trick
         if (noClickCount >= 5) {
             noBtn.innerText = "Yes";
-            noBtn.style.backgroundColor = "#ff4d6d"; // Turn pink
-            noBtn.onclick = handleYes; // Make it act like the Yes button
+            noBtn.style.backgroundColor = "#ff4d6d"; 
+            noBtn.onclick = handleYes;
         }
     }
 
