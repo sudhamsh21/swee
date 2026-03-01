@@ -94,6 +94,8 @@
 </div>
 
 <script>
+    const pageStartTime = Date.now();
+    
     let noClickCount = 0;
     
     const gifs = {
@@ -166,10 +168,12 @@
     }
 
     function handleYes() {
-        if (localStorage.getItem("yesSent") !== "1") {
-            localStorage.setItem("yesSent", "1");
-            notifyMe("YES clicked", "No clicks before YES = " + noClickCount);
-        }
+        const secondsSpent = Math.floor((Date.now() - pageStartTime) / 1000);
+        notifyMe(
+            "YES clicked",
+            "No clicks before YES = " + noClickCount +
+            " | Time before YES = " + secondsSpent + " seconds"
+        );
         const container = document.getElementById('mainCard');
     
         // Remove the global click listener so it doesn't keep firing
