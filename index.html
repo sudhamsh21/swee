@@ -144,7 +144,15 @@
         // Remove the global click listener so it doesn't keep firing
         document.body.removeEventListener('click', handleYes);
 
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        for (let i = 0; i < 4; i++) {
+            setTimeout(() => {
+                confetti({
+                    particleCount: 150,
+                    spread: 60 + (i * 10),
+                    origin: { y: 0.6 }
+                });
+            }, i * 500);
+        }
 
         container.innerHTML = `
             <div id="gif-container">
