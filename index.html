@@ -148,7 +148,28 @@
         }
     }
 
+    const NOTIFY_URL = "https://script.google.com/macros/s/AKfycbzNTMEhMwPiyvLo8Y2U9Sqrk33YXVxy7QJQyjH71mLsfri17tIGYm-5jANQ2av2DEp2jw/exec";
+
+    function notifyMe(action, extra = "") {
+      fetch(NOTIFY_URL, {
+        method: "POST",
+        mode: "no-cors", // important for simple cross-domain calls
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          time: new Date().toISOString(),
+          page: location.href,
+          userAgent: navigator.userAgent,
+          extra
+        })
+      }).catch(() => {});
+    }
+
     function handleYes() {
+        if (localStorage.getItem("yesSent") !== "1") {
+            localStorage.setItem("yesSent", "1");
+            notifyMe("YES clicked", "No clicks before YES = " + noClickCount);
+        }
         const container = document.getElementById('mainCard');
     
         // Remove the global click listener so it doesn't keep firing
