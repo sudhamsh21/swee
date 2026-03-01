@@ -6,16 +6,17 @@
     <title>I just wanna be yours ❤️</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #ffeef2;
-            font-family: 'Patrick Hand', cursive;
-            overflow: hidden;
-            text-align: center;
+        body{
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;   /* was center */
+          min-height: 100vh;         /* was height */
+          margin: 0;
+          background-color: #ffeef2;
+          font-family: 'Patrick Hand', cursive;
+          overflow-y: auto;          /* was hidden */
+          text-align: center;
+          padding: 30px 0;          /* new */
         }
         .container {
             padding: 20px;
@@ -140,10 +141,10 @@
 
     function handleYes() {
         const container = document.getElementById('mainCard');
-        
+    
         // Remove the global click listener so it doesn't keep firing
         document.body.removeEventListener('click', handleYes);
-
+    
         for (let i = 0; i < 4; i++) {
             setTimeout(() => {
                 confetti({
@@ -153,28 +154,43 @@
                 });
             }, i * 500);
         }
-
+    
+        const foreverSrc = "forever_image.jpeg";
+    
+        // Show a quick loading state while the image preloads
         container.innerHTML = `
             <div id="gif-container">
                 <img src="${gifs.happy}" style="width:100%; height:100%; object-fit:contain;">
             </div>
-
-            <h1 style="color: #d63384;">Yessss! You just made me the happiest person alive! I always wanna be yours sweetiee pie ❤️✨</h1>
-            
-            <!-- Your Forever Image -->
-            <div style="margin: 15px 0;">
-                <img src="forever_image.jpeg" 
-                     style="width:100%; max-width:280px; border-radius:20px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
-            </div>
-            
-            <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">
-                🎉 Congratulations! Your lifetime premium subscription with Sudhamsh is now officially activated! 💍<br><br>
-                Get ready to enjoy unlimited love, nonstop laughter, warm hugs, and the purest, most honest kind of forever. 🥺❤️<br><br>
-                Let’s rock n roll, my sweety! 🚀<br>
-                We’re about to create a ton of beautiful memories together — the kind that last a lifetime and beyond. ✨💕
-            </p>
+            <p style="font-size: 1rem; color: #555; margin-top: 10px;">Loading...</p>
         `;
-    }
+    
+        const img = new Image();
+        img.src = foreverSrc;
+    
+        img.onload = () => {
+            container.innerHTML = `
+                <div id="gif-container">
+                    <img src="${gifs.happy}" style="width:100%; height:100%; object-fit:contain;">
+                </div>
+    
+                <h1 style="color: #d63384;">Yessss! You just made me the happiest person alive! I always wanna be yours sweetiee pie ❤️✨</h1>
+                
+                <!-- Your Forever Image -->
+                <div style="margin: 15px 0;">
+                    <img src="${foreverSrc}" 
+                         style="width:100%; max-width:280px; border-radius:20px; box-shadow:0 8px 20px rgba(0,0,0,0.15);">
+                </div>
+                
+                <p style="font-size: 1.05rem; color: #555; line-height: 1.6;">
+                    🎉 Congratulations! Your lifetime premium subscription with Sudhamsh is now officially activated! 💍<br><br>
+                    Get ready to enjoy unlimited love, nonstop laughter, warm hugs, and the purest, most honest kind of forever. 🥺❤️<br><br>
+                    Let’s rock n roll, my sweety! 🚀<br>
+                    We’re about to create a ton of beautiful memories together — the kind that last a lifetime and beyond. ✨💕
+                </p>
+            `;
+        };
+    } // ✅ closes handleYes()
 </script>
 
 </body>
