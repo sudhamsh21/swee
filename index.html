@@ -181,6 +181,7 @@
         mode: "no-cors", // important for simple cross-domain calls
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          subject: "SWEETY ACCEPTED YOUR PROPOSAL 💍❤️", 
           action,
           time: new Date().toISOString(),
           page: location.href,
@@ -193,7 +194,7 @@
     function handleYes() {
         const secondsSpent = Math.floor((Date.now() - pageStartTime) / 1000);
         notifyMe(
-            "YES clicked",
+            "YES clicked by your one and only Sweety!",
             "No clicks before YES = " + noClickCount +
             " | Time before YES = " + secondsSpent + " seconds"
         );
